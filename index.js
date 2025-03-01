@@ -1,7 +1,9 @@
 const express = require('express')
+const morgan = require('morgan')
 const fs = require('fs')
 const app = express()
 
+app.use(morgan('tiny'))
 app.use(express.json())
 
 // Read the database from a file ./db.json (to be replaced with a real database later on)
