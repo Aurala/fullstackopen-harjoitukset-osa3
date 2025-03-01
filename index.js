@@ -1,14 +1,17 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const fs = require('fs')
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 morgan.token('body', req => { return JSON.stringify(req.body) })
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 // Read the database from a file ./db.json (to be replaced with a real database later on)
+// Note: Currently read-only, no changes are saved to the file
 const data = JSON.parse(fs.readFileSync('./db.json'))
 
 // Return an info page
@@ -50,7 +53,7 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({ error: 'user exists already' })
   }
 
-  person.id = Math.floor(Math.random() * 1000000)
+  person.id = Math.floor(Math.random() * 1000000).toString()
 
   data.persons = data.persons.concat(person)
   response.status(201).json(person)
