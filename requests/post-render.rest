@@ -1,10 +1,14 @@
+#
+# Render requests
+#
+
 # List persons, should return 4 persons with the test database
-GET http://127.0.0.1:3001/api/persons
+GET https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 
 ###
 
 # Add a person, should return 201
-POST http://127.0.0.1:3001/api/persons
+POST https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 Content-Type: application/json
 
 {
@@ -15,7 +19,7 @@ Content-Type: application/json
 ###
 
 # Add a person, should fail with return code 400 because of missing body
-POST http://127.0.0.1:3001/api/persons
+POST https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 Content-Type: application/json
 
 {
@@ -25,7 +29,7 @@ Content-Type: application/json
 ###
 
 # Add a person, should fail with return code 400 because of missing name
-POST http://127.0.0.1:3001/api/persons
+POST https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 Content-Type: application/json
 
 {
@@ -35,7 +39,7 @@ Content-Type: application/json
 ###
 
 # Add a person, should fail with return code 400 because of missing number
-POST http://127.0.0.1:3001/api/persons
+POST https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 Content-Type: application/json
 
 {
@@ -45,7 +49,7 @@ Content-Type: application/json
 ###
 
 # Add a person, should fail with return code 400 because of a duplicate name
-POST http://127.0.0.1:3001/api/persons
+POST https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
 Content-Type: application/json
 
 {
@@ -56,4 +60,4 @@ Content-Type: application/json
 ###
 
 # List persons, should return 5 persons with the test database
-GET http://127.0.0.1:3001/api/persons
+GET https://fullstackopen-harjoitukset-osa3.onrender.com/api/persons
