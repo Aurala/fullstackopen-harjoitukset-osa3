@@ -14,16 +14,46 @@ Content-Type: application/json
 
 ###
 
-# Add a person, should return 201
+# Add a person, should fail with return code 400 because of missing body
 POST http://127.0.0.1:3001/api/persons
 Content-Type: application/json
 
 {
-  "name": "Taku Orava",
+  
+}
+
+###
+
+# Add a person, should fail with return code 400 because of missing name
+POST http://127.0.0.1:3001/api/persons
+Content-Type: application/json
+
+{
   "number": "555-0002"
 }
 
 ###
 
-# List persons, should return 6 persons with the test database
+# Add a person, should fail with return code 400 because of missing number
+POST http://127.0.0.1:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Taku Orava"
+}
+
+###
+
+# Add a person, should fail with return code 400 because of a duplicate name
+POST http://127.0.0.1:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Tiku Orava",
+  "number": "555-0001"
+}
+
+###
+
+# List persons, should return 5 persons with the test database
 GET http://127.0.0.1:3001/api/persons

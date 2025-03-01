@@ -33,10 +33,18 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-// Add a new person (with a random id), returns status code 201 if successful
+// Add a new person (with a random id), returns status code 201 if successful, 400 if not (missing data or a duplicate)
 // Note: Does not add the person to the database file (yet), only to the memory
 app.post('/api/persons', (request, response) => {
   const person = request.body
+
+  if (!person || !person.name || !person.number) {
+    return response.status(400).json({ error: 'name or number missing' })
+  }
+
+  if (data.persons.find(p => p.name === person.name)) {
+    return response.status(400).json({ error: 'user exists already' })
+  }
 
   person.id = Math.floor(Math.random() * 1000000)
 
@@ -45,7 +53,7 @@ app.post('/api/persons', (request, response) => {
 })
 
 // Delete a single person, status code 204 if successful, 404 if not found
-// Note: Does not delete the file from the database file (yet), only from the memory
+// Note: Does not delete the person from the database file (yet), only from the memory
 app.delete('/api/persons/:id', (request, response) => {
   const id = request.params.id
   const person = data.persons.find(person => person.id === id)
