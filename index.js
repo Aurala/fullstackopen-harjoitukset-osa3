@@ -31,6 +31,21 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+// Delete a single person, status code 204 if successful, 404 if not found
+// Note: Does not delete the file from the database file (yet), only from the memory
+app.delete('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const person = data.persons.find(person => person.id === id)
+
+  if (!person) {
+    return response.status(404).end()
+  } else {
+    data.persons = data.persons.filter(person => person.id !== id)
+    response.status(204).end()
+  }
+})
+
+
 // Start the server
 const PORT = 3001
 app.listen(PORT, () => {
