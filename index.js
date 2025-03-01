@@ -3,8 +3,10 @@ const morgan = require('morgan')
 const fs = require('fs')
 const app = express()
 
-app.use(morgan('tiny'))
 app.use(express.json())
+
+morgan.token('body', req => { return JSON.stringify(req.body) })
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 // Read the database from a file ./db.json (to be replaced with a real database later on)
 const data = JSON.parse(fs.readFileSync('./db.json'))
