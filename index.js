@@ -2,6 +2,8 @@ const express = require('express')
 const fs = require('fs')
 const app = express()
 
+app.use(express.json())
+
 // Read the database from a file ./db.json (to be replaced with a real database later on)
 const data = JSON.parse(fs.readFileSync('./db.json'))
 
@@ -31,6 +33,17 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+// Add a new person (with a random id), returns status code 201 if successful
+// Note: Does not add the person to the database file (yet), only to the memory
+app.post('/api/persons', (request, response) => {
+  const person = request.body
+
+  person.id = Math.floor(Math.random() * 1000000)
+
+  data.persons = data.persons.concat(person)
+  response.status(201).json(person)
+})
+
 // Delete a single person, status code 204 if successful, 404 if not found
 // Note: Does not delete the file from the database file (yet), only from the memory
 app.delete('/api/persons/:id', (request, response) => {
@@ -44,7 +57,6 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
   }
 })
-
 
 // Start the server
 const PORT = 3001

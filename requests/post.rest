@@ -1,0 +1,29 @@
+# List persons, should return 4 persons with the test database
+GET http://127.0.0.1:3001/api/persons
+
+###
+
+# Add a person, should return 201
+POST http://127.0.0.1:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Tiku Orava",
+  "number": "555-0001"
+}
+
+###
+
+# Add a person, should return 201
+POST http://127.0.0.1:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Taku Orava",
+  "number": "555-0002"
+}
+
+###
+
+# List persons, should return 6 persons with the test database
+GET http://127.0.0.1:3001/api/persons
