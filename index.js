@@ -19,6 +19,18 @@ app.get('/api/persons', (request, response) => {
   response.json(data.persons)
 })
 
+// Return a single person in JSON, status code 404 if not found
+app.get('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  const person = data.persons.find(person => person.id === id)
+
+  if (!person) {
+    return response.status(404).end()
+  } else {
+    response.json(person)
+  }
+})
+
 // Start the server
 const PORT = 3001
 app.listen(PORT, () => {
