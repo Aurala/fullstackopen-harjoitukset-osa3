@@ -2,6 +2,11 @@
 # DEV server requests
 #
 
+# Invalid endpoint, returns 404
+GET http://127.0.0.1:3001/api/cats
+
+###
+
 # List all persons in the database
 GET http://127.0.0.1:3001/api/persons
 
@@ -32,4 +37,18 @@ Content-Type: application/json
 #   204 - No Content if the person is deleted successfully
 #   400 - Bad Request if the ID is invalid
 #   404 - Not Found if the ID is valid but the person does not exist
-DELETE http://127.0.0.1:3001/api/persons/67e7e579162bd8f3a1ab93dd
+DELETE http://127.0.0.1:3001/api/persons/67e95f491b7cfa7341666de3
+
+###
+
+# Updates a specific person in the database
+#   200 - OK if the person is updated successfully
+#   400 - Bad Request if the ID is invalid or the request body, name or number is missing
+#   404 - Not Found if the ID is valid but the person does not exist
+PUT http://127.0.0.1:3001/api/persons/67e7e9840f6035d4ccb44252
+Content-Type: application/json
+
+{
+  "name": "Tiku Orava",
+  "number": "555-0002"
+}

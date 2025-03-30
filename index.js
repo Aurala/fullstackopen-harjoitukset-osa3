@@ -51,9 +51,13 @@ app.get('/api/persons/:id', (request, response, next) => {
   }).catch(error => next(error))
 })
 
-// Add a new person, returns status code 201 if successful, 400 if not (missing data)
+// Add a new person, returns status code 201 if successful, 400 if missing data
 app.post('/api/persons', (request, response, next) => {
   const person = request.body
+
+  if (!person.name || !person.number) {
+    return response.status(400).json({ error: 'name or number missing' })
+  }
 
   const newPerson = new Person({
     name: person.name,
@@ -80,13 +84,44 @@ app.delete('/api/persons/:id', (request, response, next) => {
   }).catch(error => next(error))
 })
 
-app.use((err, req, res, next) => {
-  console.error(err.name, err.message)
-  if (err.name === 'CastError') {
-    return res.status(400).json({ error: 'id not a valid MongoDB ObjectId' })
+// Update a person's number, status code 200 if successful, 400 if missing data, 404 if person not found
+app.put('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id
+  const { name, number } = request.body
+
+  if (!name || !number) {
+    return response.status(400).json({ error: 'name or number missing' })
   }
-  next(err)
+
+  Person.findByIdAndUpdate(id, { name, number }, { new: true })
+    .then(result => {
+      if (result) {
+        console.log('Updated person:', result.name)
+        response.json(result)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
+
+const unknownEndpoint = (request, response) => {
+  console.log('Unknown endpoint:', request.path)
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (err, request, response, next) => {
+  console.error("Error:", err.name, err.message)
+  if (err.name === 'CastError') {
+    return response.status(400).json({ error: 'id not a valid MongoDB ObjectId' })
+  }
+  response.status(500).json({ error: 'internal server error' })
+  next(err)
+}
+
+app.use(errorHandler)
 
 // Start the server
 const PORT = process.env.PORT || 3001
