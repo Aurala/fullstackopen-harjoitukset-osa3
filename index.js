@@ -35,7 +35,6 @@ app.get('/info', (request, response) => {
 // Return all persons
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result => {
-    console.log('Persons:', result)
     response.json(result)
   })
 })
