@@ -36,7 +36,7 @@ app.get('/info', (request, response) => {
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(result => {
     response.json(result)
-  })
+  }).catch(error => next(error))
 })
 
 // Return a single person, status code 404 if not found
@@ -53,10 +53,6 @@ app.get('/api/persons/:id', (request, response, next) => {
 // Add a new person, returns status code 201 if successful, 400 if missing data
 app.post('/api/persons', (request, response, next) => {
   const person = request.body
-
-  if (!person.name || !person.number) {
-    return response.status(400).json({ error: 'name or number missing' })
-  }
 
   const newPerson = new Person({
     name: person.name,
@@ -88,10 +84,6 @@ app.put('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   const { name, number } = request.body
 
-  if (!name || !number) {
-    return response.status(400).json({ error: 'name or number missing' })
-  }
-
   Person.findByIdAndUpdate(id, { number }, { new: true })
     .then(result => {
       if (result) {
@@ -113,9 +105,17 @@ app.use(unknownEndpoint)
 
 const errorHandler = (err, request, response, next) => {
   console.error("Error:", err.name, err.message)
+
+  if (err.name === 'MongoServerError' && err.code === 11000) {
+    return response.status(400).json({ error: 'name must be unique' })
+  }
+  if (err.name === 'ValidationError') {
+    return response.status(400).json({ error: err.message })
+  }
   if (err.name === 'CastError') {
     return response.status(400).json({ error: 'id not a valid MongoDB ObjectId' })
   }
+
   response.status(500).json({ error: 'internal server error' })
   next(err)
 }
