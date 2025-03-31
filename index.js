@@ -92,7 +92,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     return response.status(400).json({ error: 'name or number missing' })
   }
 
-  Person.findByIdAndUpdate(id, { name, number }, { new: true })
+  Person.findByIdAndUpdate(id, { number }, { new: true })
     .then(result => {
       if (result) {
         console.log('Updated person:', result.name)
