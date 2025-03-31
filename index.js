@@ -82,9 +82,9 @@ app.delete('/api/persons/:id', (request, response, next) => {
 // Update a person's number, status code 200 if successful, 400 if missing data, 404 if person not found
 app.put('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
-  const { name, number } = request.body
+  const { number } = request.body
 
-  Person.findByIdAndUpdate(id, { number }, { new: true })
+  Person.findByIdAndUpdate(id, { number }, { new: true, runValidators: true, context: 'query' })
     .then(result => {
       if (result) {
         console.log('Updated person:', result.name)
