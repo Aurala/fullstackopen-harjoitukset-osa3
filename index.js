@@ -3,7 +3,6 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const fs = require('fs')
 const Person = require('./models/person')
 const app = express()
 
@@ -33,7 +32,7 @@ app.get('/info', (request, response) => {
 })
 
 // Return all persons
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
   Person.find({}).then(result => {
     response.json(result)
   }).catch(error => next(error))
@@ -104,7 +103,7 @@ const unknownEndpoint = (request, response) => {
 app.use(unknownEndpoint)
 
 const errorHandler = (err, request, response, next) => {
-  console.error("Error:", err.name, err.message)
+  console.error('Error:', err.name, err.message)
 
   if (err.name === 'MongoServerError' && err.code === 11000) {
     return response.status(400).json({ error: 'name must be unique' })

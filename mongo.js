@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-if (process.argv.length != 3 && process.argv.length != 5) {
+if (process.argv.length !== 3 && process.argv.length !== 5) {
   console.log(
     `Usage:
     "node mongo.js <password>" lists all persons in the phonebook
@@ -28,7 +28,7 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-if (process.argv.length == 3) {
+if (process.argv.length === 3) {
 
   Person.find({}).then(result => {
     console.log('Phonebook:')
